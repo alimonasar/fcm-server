@@ -1,7 +1,7 @@
 import express from 'express';
 import admin from 'firebase-admin';
 import cors from 'cors';
-import serviceAccount from './service-account.json' assert { type: "json" };
+const serviceAccount = JSON.parse(process.env.GOOGLE_CREDENTIALS);
 
 const app = express();
 app.use(cors());
