@@ -19,7 +19,11 @@ app.post('/send', async (req, res) => {
   const { token, title, body } = req.body;
 
   const message = {
-    notification: { title, body },
+    data: { // استبدال notification بـ data
+      title: title,
+      body: body,
+      // يمكن إضافة حقول إضافية هنا
+    },
     token: token
   };
 
@@ -30,6 +34,3 @@ app.post('/send', async (req, res) => {
     res.status(500).send({ success: false, error: error.message });
   }
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
