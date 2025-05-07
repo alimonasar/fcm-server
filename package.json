@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js" // إضافة إذا كنت تستخدم nodemon للتطوير
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -14,7 +14,7 @@
     "cors": "^2.8.5"
   },
   "engines": {
-    "node": ">=16.0.0" // تحديد إصدار Node.js المطلوب
+    "node": ">=16.0.0"
   },
   "author": "Your Name",
   "license": "MIT"
