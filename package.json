@@ -1,14 +1,21 @@
 {
   "name": "fcm-server",
   "version": "1.0.0",
+  "description": "Firebase Cloud Messaging Server",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js" // إضافة إذا كنت تستخدم nodemon للتطوير
   },
   "dependencies": {
     "express": "^4.18.2",
     "firebase-admin": "^12.0.0",
     "cors": "^2.8.5"
-  }
+  },
+  "engines": {
+    "node": ">=16.0.0" // تحديد إصدار Node.js المطلوب
+  },
+  "author": "Your Name",
+  "license": "MIT"
 }
