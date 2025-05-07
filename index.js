@@ -25,12 +25,14 @@ app.use(express.json());
 
 app.post('/send', async (req, res) => {
   try {
-    const { token, title, body } = req.body;
+    // التعديل هنا ↓ (إضافة sender_id)
+    const { token, title, body, sender_id } = req.body;
     
-    if (!token || !title || !body) {
+    // التعديل هنا ↓ (إضافة تحقق من sender_id)
+    if (!token || !title || !body || !sender_id) {
       return res.status(400).json({
         success: false,
-        error: 'بيانات ناقصة: token، title، body مطلوبة'
+        error: 'بيانات ناقصة: token، title، body، sender_id مطلوبة'
       });
     }
 
@@ -38,6 +40,7 @@ app.post('/send', async (req, res) => {
       data: {
         title,
         body,
+        sender_id, // التعديل هنا ↓ (إضافة sender_id للإشعار)
         timestamp: Date.now().toString()
       },
       token
