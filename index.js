@@ -25,10 +25,8 @@ app.use(express.json());
 
 app.post('/send', async (req, res) => {
   try {
-    // التعديل هنا ↓ (إضافة sender_id)
     const { token, title, body, sender_id } = req.body;
     
-    // التعديل هنا ↓ (إضافة تحقق من sender_id)
     if (!token || !title || !body || !sender_id) {
       return res.status(400).json({
         success: false,
