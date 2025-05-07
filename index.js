@@ -1,36 +1,66 @@
 import express from 'express';
 import admin from 'firebase-admin';
 import cors from 'cors';
-import fs from 'fs';
-
-const serviceAccount = JSON.parse(
-  fs.readFileSync('/etc/secrets/service-account.json', 'utf8')
-);
 
 const app = express();
-app.use(cors());
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_JSON);
+
+try {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+} catch (error) {
+  console.error('فشل تهيئة Firebase:', error);
+  process.exit(1);
+}
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || '*';
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
+
 app.use(express.json());
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+app.post('/send', async (req, res) => {
+  try {
+    const { token, title, body } = req.body;
+    
+    if (!token || !title || !body) {
+      return res.status(400).json({
+        success: false,
+        error: 'بيانات ناقصة: token، title، body مطلوبة'
+      });
+    }
+
+    const message = {
+      data: {
+        title,
+        body,
+        timestamp: Date.now().toString()
+      },
+      token
+    };
+
+    const response = await admin.messaging().send(message);
+    
+    console.log('تم الإرسال بنجاح:', response);
+    res.json({
+      success: true,
+      messageId: response
+    });
+
+  } catch (error) {
+    console.error('خطأ في إرسال الإشعار:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'خطأ داخلي في الخادم'
+    });
+  }
 });
 
-app.post('/send', async (req, res) => {
-  const { token, title, body } = req.body;
-
-  const message = {
-    data: {
-      title: title,
-      body: body,
-      // يمكن إضافة حقول إضافية هنا
-    },
-    token: token
-  };
-
-  try {
-    const response = await admin.messaging().send(message);
-    res.status(200).send({ success: true, response });
-  } catch (error) {
-    res.status(500).send({ success: false, error: error.message });
-  }
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`الخادم يعمل على المنفذ ${port}`);
 });
