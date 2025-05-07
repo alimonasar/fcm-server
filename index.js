@@ -19,7 +19,7 @@ app.post('/send', async (req, res) => {
   const { token, title, body } = req.body;
 
   const message = {
-    data: { // استبدال notification بـ data
+    data: {
       title: title,
       body: body,
       // يمكن إضافة حقول إضافية هنا
