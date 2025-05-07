@@ -40,7 +40,7 @@ app.post('/send', async (req, res) => {
       data: {
         title,
         body,
-        sender_id, // التعديل هنا ↓ (إضافة sender_id للإشعار)
+        sender_id,
         timestamp: Date.now().toString()
       },
       token
